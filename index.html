@@ -1,4 +1,7 @@
 <html>
+  <head>
+    <meta charset="utf-8"/>
+  </head>
   <script src="https://cdn.jsdelivr.net/npm/ruby-head-wasm-wasi@0.2.0/dist/browser.umd.js"></script>
   <script>
     const { DefaultRubyVM } = window["ruby-wasm-wasi"];
@@ -32,7 +35,7 @@
   </script>
   <script type="text/ruby">
     require "js"
-    luckiness = ["Lucky", "Unlucky"].sample
+    luckiness = ["Hello", "こんにちは", "😀"].sample
     JS::eval("document.body.innerText = '#{luckiness}'")
   </script>
   <style>
