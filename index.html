@@ -5,6 +5,7 @@
   <script src="https://cdn.jsdelivr.net/npm/ruby-head-wasm-wasi@0.2.0/dist/browser.umd.js"></script>
   <script>
     const { DefaultRubyVM } = window["ruby-wasm-wasi"];
+    let rubyVm = null;
     const main = async () => {
       // Fetch and instntiate WebAssembly binary
       const response = await fetch(
@@ -13,15 +14,16 @@
       const buffer = await response.arrayBuffer();
       const module = await WebAssembly.compile(buffer);
       const { vm } = await DefaultRubyVM(module);
+      rubyVm = vm;
 
-      vm.printVersion();
+      rubyVm.printVersion();
 
-      runRubyScriptsInHtml(vm);
+      runRubyScriptsInHtml();
     };
 
-    const runRubyScriptsInHtml = (vm) => {
+    const runRubyScriptsInHtml = function () {
       const input = document.getElementById("input");
-      const result = vm.eval(input.value);
+      const result = rubyVm.eval(input.value);
       document.getElementById("output").value = result;
     };
 
@@ -39,8 +41,8 @@
   </style>
   <body>
     <div>
-      <textarea id="input" cols="80" rows="10">luckiness = ["Hello", "こんにちは", "😀"].sample</textarea>
-      <button id="run">Run</button>
+      <textarea id="input" cols="80" rows="10">["Hello", "こんにちは", "😀"].sample</textarea>
+      <button id="run" onclick="runRubyScriptsInHtml()">Run</button>
     </div>
     <div>
       <textarea id="output" cols="80" rows="10" readonly></textarea>
