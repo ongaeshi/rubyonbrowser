@@ -20,23 +20,12 @@
     };
 
     const runRubyScriptsInHtml = (vm) => {
-      const tags = document.getElementsByTagName("script");
-      for (var i = 0, len = tags.length; i < len; i++) {
-        const tag = tags[i];
-        if (tag.type === "text/ruby") {
-          if (tag.innerHTML) {
-            vm.eval(tag.innerHTML);
-          }
-        }
-      }
+      const input = document.getElementById("input");
+      const result = vm.eval(input.value);
+      document.getElementById("output").value = result;
     };
 
     main();
-  </script>
-  <script type="text/ruby">
-    require "js"
-    luckiness = ["Hello", "こんにちは", "😀"].sample
-    JS::eval("document.getElementById('output').value = '#{luckiness}'")
   </script>
   <style>
     body {
@@ -50,7 +39,7 @@
   </style>
   <body>
     <div>
-      <textarea id="input" cols="80" rows="10"></textarea>
+      <textarea id="input" cols="80" rows="10">luckiness = ["Hello", "こんにちは", "😀"].sample</textarea>
       <button id="run">Run</button>
     </div>
     <div>
