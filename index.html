@@ -36,7 +36,7 @@
   <script type="text/ruby">
     require "js"
     luckiness = ["Hello", "こんにちは", "😀"].sample
-    JS::eval("document.body.innerText = '#{luckiness}'")
+    JS::eval("document.getElementById('output').value = '#{luckiness}'")
   </script>
   <style>
     body {
@@ -48,5 +48,13 @@
       justify-content: center;
     }
   </style>
-  <body></body>
+  <body>
+    <div>
+      <textarea id="input" cols="80" rows="10"></textarea>
+      <button id="run">Run</button>
+    </div>
+    <div>
+      <textarea id="output" cols="80" rows="10" readonly></textarea>
+    </div>
+  </body>
 </html>
