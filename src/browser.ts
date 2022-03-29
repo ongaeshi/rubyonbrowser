@@ -25,7 +25,7 @@ export const DefaultRubyVM = async (
         let buffer = arguments[1];
         text = new TextDecoder("utf-8").decode(buffer);
       }
-      const handlers = {
+      const handlers:any = {
         1: (line: string) => console.log(line),
         2: (line: string) => console.warn(line),
       };
