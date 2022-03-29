@@ -14,11 +14,12 @@ const main = async () => {
   rubyVm.printVersion();
 
   runRubyScriptsInHtml();
+  document.getElementById("run").onclick = runRubyScriptsInHtml;
 };
 
 export const runRubyScriptsInHtml = function () {
-  const input:HTMLTextAreaElement = <HTMLTextAreaElement>document.getElementById("input");
-  const output:HTMLTextAreaElement = <HTMLTextAreaElement>document.getElementById("output");
+  const input = <HTMLTextAreaElement>document.getElementById("input");
+  const output = <HTMLTextAreaElement>document.getElementById("output");
   const result = rubyVm.eval(input.value);
   output.value = result;
 };
