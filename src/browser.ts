@@ -1,5 +1,6 @@
 import { WASI } from "@wasmer/wasi";
 import { WasmFs } from "@wasmer/wasmfs";
+import * as path from "path-browserify"
 import { RubyVM } from "ruby-head-wasm-wasi/dist/index";
 
 export const DefaultRubyVM = async (
@@ -12,6 +13,7 @@ export const DefaultRubyVM = async (
     bindings: {
       ...WASI.defaultBindings,
       fs: wasmFs.fs,
+      path: path,
     },
     preopens: {
         "/tmp": "/tmp"
@@ -50,6 +52,9 @@ export const DefaultRubyVM = async (
   await vm.setInstance(instance);
 
   wasi.setMemory(instance.exports.memory as WebAssembly.Memory);
+  // Manually call `_initialize`, which is a part of reactor modoel ABI,
+  // because the WASI polyfill doesn't support it yet.
+  (instance.exports._initialize as Function)();
   vm.initialize();
 
   return {
