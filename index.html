@@ -2,33 +2,6 @@
   <head>
     <meta charset="utf-8"/>
   </head>
-  <script src="https://cdn.jsdelivr.net/npm/ruby-head-wasm-wasi@0.2.0/dist/browser.umd.js"></script>
-  <script>
-    const { DefaultRubyVM } = window["ruby-wasm-wasi"];
-    let rubyVm = null;
-    const main = async () => {
-      // Fetch and instntiate WebAssembly binary
-      const response = await fetch(
-        "https://cdn.jsdelivr.net/npm/ruby-head-wasm-wasi@0.2.0/dist/ruby.wasm"
-      );
-      const buffer = await response.arrayBuffer();
-      const module = await WebAssembly.compile(buffer);
-      const { vm } = await DefaultRubyVM(module);
-      rubyVm = vm;
-
-      rubyVm.printVersion();
-
-      runRubyScriptsInHtml();
-    };
-
-    const runRubyScriptsInHtml = function () {
-      const input = document.getElementById("input");
-      const result = rubyVm.eval(input.value);
-      document.getElementById("output").value = result;
-    };
-
-    main();
-  </script>
   <style>
     body {
       font-size: 5rem;
