@@ -7,11 +7,15 @@ export const DefaultRubyVM = async (
   options: { consolePrint: boolean } = { consolePrint: true }
 ) => {
   const wasmFs = new WasmFs();
+  wasmFs.fs.mkdirSync("/tmp", 0o777);
   const wasi = new WASI({
     bindings: {
       ...WASI.defaultBindings,
       fs: wasmFs.fs,
     },
+    preopens: {
+        "/tmp": "/tmp"
+    }
   });
 
   if (options.consolePrint) {
