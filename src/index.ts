@@ -1,4 +1,4 @@
-import { DefaultRubyVM } from "ruby-head-wasm-wasi/dist/browser";
+import { DefaultRubyVM } from "./browser";
 
 let rubyVm:any = null;
 const main = async () => {
