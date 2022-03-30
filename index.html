@@ -14,7 +14,11 @@
   </style>
   <body>
     <div>
-      <textarea id="input" cols="80" rows="10"></textarea>
+      <textarea id="input" cols="80" rows="10">
+File.write("abc.txt", "ABC")
+path = Dir.glob("*").first
+"#{path}: #{File.read(path)}"
+      </textarea>
       <button id="run">Run</button>
     </div>
     <div>

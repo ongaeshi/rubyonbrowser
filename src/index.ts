@@ -14,11 +14,6 @@ const main = async () => {
   rubyVm.printVersion();
 
   document.getElementById("run").onclick = runRubyScriptsInHtml;
-  (<HTMLTextAreaElement>document.getElementById("input")).value = `File.write("/tmp/abc.txt", "ABC")
-
-path = Dir.glob("/tmp/*")[0]
-File.read(path)
-`;
 
   runRubyScriptsInHtml();
 };
