@@ -16,7 +16,7 @@ export const DefaultRubyVM = async (
       path: path,
     },
     preopens: {
-        "/tmp": "/tmp"
+        "/": "/tmp"
     }
   });
 
