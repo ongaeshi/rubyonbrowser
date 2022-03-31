@@ -10,12 +10,12 @@
   <body>
     <div class="container py-2">
       <h1>Ruby on Browser</h1>
-      <textarea id="input" cols="80" rows="10">File.write("abc.txt", "ABC")
+      <textarea id="input" class="form-control" rows="10">File.write("abc.txt", "ABC")
 path = Dir.glob("*").first
 "#{path}: #{File.read(path)}"
 </textarea>
       <button id="run">Run</button>
-      <textarea id="output" cols="80" rows="10" readonly></textarea>
+      <textarea id="output" class="form-control" rows="10" readonly></textarea>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
