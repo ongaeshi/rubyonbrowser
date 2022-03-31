@@ -8,13 +8,19 @@
     <title>Ruby on Browser</title>
   </head>
   <body>
+    <nav class="navbar navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          Ruby on Browser
+        </a>
+      </div>
+    </nav>
     <div class="container py-2">
-      <h1>Ruby on Browser</h1>
       <textarea id="input" class="form-control" rows="10">File.write("abc.txt", "ABC")
 path = Dir.glob("*").first
 "#{path}: #{File.read(path)}"
 </textarea>
-      <button id="run">Run</button>
+      <button id="run" type="button" class="btn btn-primary">Run</button>
       <textarea id="output" class="form-control" rows="10" readonly></textarea>
     </div>
 
