@@ -14,7 +14,7 @@ const main = async () => {
   rubyVm.printVersion();
 
   document.getElementById("run").onclick = runRubyScriptsInHtml;
-  document.getElementById("clear").onclick = clearRubyScripts;
+  document.getElementById("clear").onclick = selectAllScripts;
 
   runRubyScriptsInHtml();
 };
@@ -26,7 +26,7 @@ export const runRubyScriptsInHtml = function () {
   output.value = result;
 };
 
-export const clearRubyScripts = function () {
+export const selectAllScripts = function () {
   const input = <HTMLTextAreaElement>document.getElementById("input");
   input.focus();
   input.select();
