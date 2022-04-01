@@ -1,3 +1,6 @@
 # Ruby on Browser
-https://ongaeshi.github.io/rubyonbrowser/
+Ruby on Browser using Ruby WASM/WASI.
+
+https://rubyonbrowser.ongaeshi.me
+
 

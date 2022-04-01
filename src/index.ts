@@ -15,6 +15,7 @@ const main = async () => {
 
   document.getElementById("run").onclick = runRubyScriptsInHtml;
   document.getElementById("clear").onclick = selectAllScripts;
+  document.getElementById("files").onclick = listFiles;
 
   runRubyScriptsInHtml();
 };
@@ -24,12 +25,35 @@ export const runRubyScriptsInHtml = function () {
   const output = <HTMLTextAreaElement>document.getElementById("output");
   const result = rubyVm.eval(input.value);
   output.value = result;
+
+  listFiles();
 };
 
 export const selectAllScripts = function () {
   const input = <HTMLTextAreaElement>document.getElementById("input");
   input.focus();
   input.select();
+};
+
+const listFiles = function () {
+  const files = <HTMLTextAreaElement>document.getElementById("files");
+
+  const script = `def filetree(path)
+  str = "#{path}\n"
+  Dir.entries(".").each do |file|
+    if File.directory?(file)
+      str += "├─ #{file}/\n"
+    else
+      str += "├─ #{file}\n"
+    end     
+  end
+  str
+end
+
+filetree("/")
+  `; 
+
+  files.value = rubyVm.eval(script);
 };
 
 main();
