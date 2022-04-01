@@ -27,10 +27,9 @@ export const runRubyScriptsInHtml = function () {
 };
 
 export const clearRubyScripts = function () {
-  if (window.confirm("Delete scripts?")) {
-    const input = <HTMLTextAreaElement>document.getElementById("input");
-    input.value = "";  
-  }
+  const input = <HTMLTextAreaElement>document.getElementById("input");
+  input.focus();
+  input.select();
 };
 
 main();
