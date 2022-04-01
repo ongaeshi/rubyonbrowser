@@ -14,6 +14,7 @@ const main = async () => {
   rubyVm.printVersion();
 
   document.getElementById("run").onclick = runRubyScriptsInHtml;
+  document.getElementById("clear").onclick = clearRubyScripts;
 
   runRubyScriptsInHtml();
 };
@@ -23,6 +24,13 @@ export const runRubyScriptsInHtml = function () {
   const output = <HTMLTextAreaElement>document.getElementById("output");
   const result = rubyVm.eval(input.value);
   output.value = result;
+};
+
+export const clearRubyScripts = function () {
+  if (window.confirm("Delete scripts?")) {
+    const input = <HTMLTextAreaElement>document.getElementById("input");
+    input.value = "";  
+  }
 };
 
 main();
