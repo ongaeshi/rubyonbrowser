@@ -22,8 +22,6 @@ const main = async () => {
   });
   rubyVm = vm;
 
-  rubyVm.printVersion();
-
   document.getElementById("run").onclick = runRubyScriptsInHtml;
   document.getElementById("clear").onclick = selectAllScripts;
   document.getElementById("files").onclick = listFiles;
