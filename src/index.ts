@@ -36,10 +36,15 @@ export const runRubyScriptsInHtml = function () {
 
   const input = <HTMLTextAreaElement>document.getElementById("input");
   const output = <HTMLTextAreaElement>document.getElementById("output");
-  const result = rubyVm.eval(input.value);
+
+  try {
+    const result = rubyVm.eval(input.value);
   
-  if (outputBuffer.length == 0) {
-    output.value = result;
+    if (outputBuffer.length == 0) {
+      output.value = result;
+    }  
+  } catch (error) {
+    (<HTMLTextAreaElement>document.getElementById("output")).value = error;
   }
 
   listFiles();
