@@ -31,13 +31,15 @@ export const DefaultRubyVM = async (
         let buffer = arguments[1];
         text = new TextDecoder("utf-8").decode(buffer);
       }
-      if (options.consoleHandlers) {
-        options.consoleHandlers[fd](text);
-      } else {
-        const handlers:any = {
-          1: (line: string) => (<HTMLTextAreaElement>document.getElementById("output")).value += line,
+
+      const handlers = options.consoleHandlers ?
+        options.consoleHandlers :
+        {
+          1: (line: string) => console.log(line),
           2: (line: string) => console.warn(line),
         };
+
+      if (handlers[fd]) {
         handlers[fd](text);
       }
       return originalWriteSync(...arguments);
