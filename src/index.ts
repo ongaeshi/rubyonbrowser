@@ -3,10 +3,12 @@ import { DefaultRubyVM } from "./browser";
 let rubyVm:any = null;
 
 let outputBuffer:string[] = [];
+const inputTextArea:HTMLTextAreaElement = <HTMLTextAreaElement>document.getElementById("input");
+const outputTextArea:HTMLTextAreaElement = <HTMLTextAreaElement>document.getElementById("output");
 
 const printToOutput = function (line: string) {
   outputBuffer.push(line);
-  (<HTMLTextAreaElement>document.getElementById("output")).value = outputBuffer.join("");
+  outputTextArea.value = outputBuffer.join("");
 }
 
 const main = async () => {
@@ -32,26 +34,22 @@ const main = async () => {
 export const runRubyScriptsInHtml = function () {
   outputBuffer = [];
 
-  const input = <HTMLTextAreaElement>document.getElementById("input");
-  const output = <HTMLTextAreaElement>document.getElementById("output");
-
   try {
-    const result = rubyVm.eval(input.value);
+    const result = rubyVm.eval(inputTextArea.value);
   
     if (outputBuffer.length == 0) {
-      output.value = result;
+      outputTextArea.value = result;
     }  
   } catch (error) {
-    (<HTMLTextAreaElement>document.getElementById("output")).value = error;
+    outputTextArea.value = error;
   }
 
   listFiles();
 };
 
 export const selectAllScripts = function () {
-  const input = <HTMLTextAreaElement>document.getElementById("input");
-  input.focus();
-  input.select();
+  inputTextArea.focus();
+  inputTextArea.select();
 };
 
 const listFiles = function () {
