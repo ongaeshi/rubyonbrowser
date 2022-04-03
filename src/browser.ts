@@ -5,7 +5,7 @@ import { RubyVM } from "ruby-head-wasm-wasi/dist/index";
 
 export const DefaultRubyVM = async (
   rubyModule: WebAssembly.Module,
-  options: { consolePrint: boolean } = { consolePrint: true }
+  options: { consolePrint: boolean, consoleHandlers: any } = { consolePrint: true, consoleHandlers: null }
 ) => {
   const wasmFs = new WasmFs();
   wasmFs.fs.mkdirSync("/tmp", 0o777);
@@ -31,11 +31,15 @@ export const DefaultRubyVM = async (
         let buffer = arguments[1];
         text = new TextDecoder("utf-8").decode(buffer);
       }
-      const handlers:any = {
-        1: (line: string) => console.log(line),
-        2: (line: string) => console.warn(line),
-      };
-      if (handlers[fd]) handlers[fd](text);
+      if (options.consoleHandlers) {
+        options.consoleHandlers[fd](text);
+      } else {
+        const handlers:any = {
+          1: (line: string) => (<HTMLTextAreaElement>document.getElementById("output")).value += line,
+          2: (line: string) => console.warn(line),
+        };
+        handlers[fd](text);
+      }
       return originalWriteSync(...arguments);
     };
   }
