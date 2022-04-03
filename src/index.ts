@@ -24,12 +24,19 @@ const main = async () => {
   });
   rubyVm = vm;
 
+  document.getElementById("input").onkeydown = checkRunWithKeyboard;
   document.getElementById("run").onclick = runRubyScriptsInHtml;
   document.getElementById("clear").onclick = selectAllScripts;
   document.getElementById("files").onclick = listFiles;
 
   runRubyScriptsInHtml();
 };
+
+const checkRunWithKeyboard = function(event: KeyboardEvent) {
+  if (event.ctrlKey && event.key == "Enter") {
+    runRubyScriptsInHtml();
+  } 
+}
 
 export const runRubyScriptsInHtml = function () {
   outputBuffer = [];
