@@ -3,10 +3,9 @@ import { WasmFs } from "@wasmer/wasmfs";
 import * as path from "path-browserify"
 import { RubyVM } from "ruby-head-wasm-wasi/dist/index";
 
-export const DefaultRubyVM = async (
-  rubyModule: WebAssembly.Module,
+export const DefaultWASI = (
   options: { consolePrint: boolean, consoleHandlers: any } = { consolePrint: true, consoleHandlers: null }
-) => {
+  ) => {
   const wasmFs = new WasmFs();
   wasmFs.fs.mkdirSync("/tmp", 0o777);
   const wasi = new WASI({
@@ -46,6 +45,14 @@ export const DefaultRubyVM = async (
     };
   }
 
+  return { wasi, wasmFs };
+}
+
+export const DefaultRubyVM = async (
+  rubyModule: WebAssembly.Module,
+  wasi: WASI,
+  wasmFs: WasmFs
+) => {
   const vm = new RubyVM();
   const imports = {
     wasi_snapshot_preview1: wasi.wasiImport,

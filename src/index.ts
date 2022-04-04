@@ -1,4 +1,4 @@
-import { DefaultRubyVM } from "./browser";
+import { DefaultRubyVM, DefaultWASI } from "./browser";
 
 let rubyVm:any = null;
 
@@ -18,10 +18,11 @@ const main = async () => {
   );
   const buffer = await response.arrayBuffer();
   const module = await WebAssembly.compile(buffer);
-  const { vm } = await DefaultRubyVM(module, { 
+  const { wasi, wasmFs } = DefaultWASI({ 
     consolePrint: true, 
     consoleHandlers: {1: printToOutput, 2: printToOutput }
   });
+  const { vm } = await DefaultRubyVM(module, wasi, wasmFs);
   rubyVm = vm;
 
   document.getElementById("input").onkeydown = checkRunWithKeyboard;
