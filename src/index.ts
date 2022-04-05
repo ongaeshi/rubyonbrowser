@@ -1,28 +1,19 @@
-import { DefaultRubyVM } from "./browser";
+import { BrowserVm } from "./browserVm";
 
-let rubyVm:any = null;
+let browserVm:BrowserVm;
 
 let outputBuffer:string[] = [];
 const inputTextArea:HTMLTextAreaElement = <HTMLTextAreaElement>document.getElementById("input");
 const outputTextArea:HTMLTextAreaElement = <HTMLTextAreaElement>document.getElementById("output");
 
-const printToOutput = function (line: string) {
+const printToOutput = function (line: string):void {
   outputBuffer.push(line);
   outputTextArea.value = outputBuffer.join("");
 }
 
 const main = async () => {
-  // Fetch and instntiate WebAssembly binary
-  const response = await fetch(
-    "https://cdn.jsdelivr.net/npm/ruby-head-wasm-wasi@0.2.0/dist/ruby.wasm"
-  );
-  const buffer = await response.arrayBuffer();
-  const module = await WebAssembly.compile(buffer);
-  const { vm } = await DefaultRubyVM(module, { 
-    consolePrint: true, 
-    consoleHandlers: {1: printToOutput, 2: printToOutput }
-  });
-  rubyVm = vm;
+  browserVm = new BrowserVm()
+  await browserVm.createVm(printToOutput)
 
   document.getElementById("input").onkeydown = checkRunWithKeyboard;
   document.getElementById("run").onclick = runRubyScriptsInHtml;
@@ -42,10 +33,10 @@ export const runRubyScriptsInHtml = function () {
   outputBuffer = [];
 
   try {
-    const result = rubyVm.eval(inputTextArea.value);
+    const result = browserVm.vm.eval(inputTextArea.value);
   
     if (outputBuffer.length == 0) {
-      outputTextArea.value = result;
+      outputTextArea.value = result.toString()
     }  
   } catch (error) {
     outputTextArea.value = error;
@@ -77,7 +68,7 @@ end
 filetree("/")
   `; 
 
-  files.value = rubyVm.eval(script);
+  files.value = browserVm.vm.eval(script).toString()
 };
 
 main();
