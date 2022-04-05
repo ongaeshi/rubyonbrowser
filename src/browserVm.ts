@@ -7,7 +7,7 @@ export class BrowserVm {
 
   async createVm(printToOutput:(line:string)=>void) {
     const response = await fetch(
-      "https://cdn.jsdelivr.net/npm/ruby-head-wasm-wasi@0.2.0/dist/ruby.wasm"
+      "https://cdn.jsdelivr.net/npm/ruby-head-wasm-wasi@0.2.0-2022-04-05-a/dist/ruby.wasm"
     );
     const buffer = await response.arrayBuffer();
     this.module = await WebAssembly.compile(buffer);
