@@ -65,7 +65,7 @@ const listFiles = function () {
   str
 end
 
-filetree("/")
+filetree(File.expand_path(Dir.pwd))
   `; 
 
   files.value = browserVm.vm.eval(script).toString()
