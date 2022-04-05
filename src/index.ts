@@ -1,6 +1,10 @@
+import { WASI } from "@wasmer/wasi";
+import { WasmFs } from "@wasmer/wasmfs";
 import { DefaultRubyVM, DefaultWASI } from "./browser";
+import { RubyVM } from "ruby-head-wasm-wasi/dist/index";
 
-let rubyVm:any = null;
+let wasi:WASI;
+let wasmFs:WasmFs;
 
 let outputBuffer:string[] = [];
 const inputTextArea:HTMLTextAreaElement = <HTMLTextAreaElement>document.getElementById("input");
@@ -12,23 +16,17 @@ const printToOutput = function (line: string) {
 }
 
 const main = async () => {
-  // Fetch and instntiate WebAssembly binary
-  const response = await fetch(
-    "https://cdn.jsdelivr.net/npm/ruby-head-wasm-wasi@0.2.0/dist/ruby.wasm"
-  );
-  const buffer = await response.arrayBuffer();
-  const module = await WebAssembly.compile(buffer);
-  const { wasi, wasmFs } = DefaultWASI({ 
+  const defaultWASI = DefaultWASI({ 
     consolePrint: true, 
     consoleHandlers: {1: printToOutput, 2: printToOutput }
   });
-  const { vm } = await DefaultRubyVM(module, wasi, wasmFs);
-  rubyVm = vm;
+  wasi = defaultWASI.wasi;
+  wasmFs = defaultWASI.wasmFs;
 
   document.getElementById("input").onkeydown = checkRunWithKeyboard;
   document.getElementById("run").onclick = runRubyScriptsInHtml;
   document.getElementById("clear").onclick = selectAllScripts;
-  document.getElementById("files").onclick = listFiles;
+  // document.getElementById("files").onclick = listFiles;
 
   runRubyScriptsInHtml();
 };
@@ -40,19 +38,27 @@ const checkRunWithKeyboard = function(event: KeyboardEvent) {
 }
 
 export const runRubyScriptsInHtml = function () {
-  outputBuffer = [];
-
-  try {
-    const result = rubyVm.eval(inputTextArea.value);
-  
-    if (outputBuffer.length == 0) {
-      outputTextArea.value = result;
-    }  
-  } catch (error) {
-    outputTextArea.value = error;
+  const instantiateVM = async () => {
+    const { vm } = await DefaultRubyVM(wasi, wasmFs);
+    return vm;
   }
 
-  listFiles();
+  instantiateVM()
+  .then((vm) => {
+    outputBuffer = [];
+
+    try {
+      const result = vm.eval(inputTextArea.value);
+    
+      if (outputBuffer.length == 0) {
+        outputTextArea.value = result.toString();
+      }  
+    } catch (error) {
+      outputTextArea.value = error;
+    }
+  
+    listFiles(vm);  
+  })
 };
 
 export const selectAllScripts = function () {
@@ -60,7 +66,7 @@ export const selectAllScripts = function () {
   inputTextArea.select();
 };
 
-const listFiles = function () {
+const listFiles = function (vm:RubyVM) {
   const files = <HTMLTextAreaElement>document.getElementById("files");
 
   const script = `def filetree(path)
@@ -78,7 +84,7 @@ end
 filetree("/")
   `; 
 
-  files.value = rubyVm.eval(script);
+  files.value = vm.eval(script).toString();
 };
 
 main();

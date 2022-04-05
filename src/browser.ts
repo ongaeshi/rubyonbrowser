@@ -49,10 +49,27 @@ export const DefaultWASI = (
 }
 
 export const DefaultRubyVM = async (
-  rubyModule: WebAssembly.Module,
-  wasi: WASI,
+  wasiOld: WASI,
   wasmFs: WasmFs
 ) => {
+  const wasi = new WASI({
+    bindings: {
+      ...WASI.defaultBindings,
+      fs: wasmFs.fs,
+      path: path,
+    },
+    preopens: {
+        "/": "/tmp"
+    }
+  });
+
+  // Fetch and instntiate WebAssembly binary
+  const response = await fetch(
+    "https://cdn.jsdelivr.net/npm/ruby-head-wasm-wasi@0.2.0/dist/ruby.wasm"
+  );
+  const buffer = await response.arrayBuffer();
+  const module = await WebAssembly.compile(buffer);
+
   const vm = new RubyVM();
   const imports = {
     wasi_snapshot_preview1: wasi.wasiImport,
@@ -60,7 +77,7 @@ export const DefaultRubyVM = async (
 
   vm.addToImports(imports);
 
-  const instance = await WebAssembly.instantiate(rubyModule, imports);
+  const instance = await WebAssembly.instantiate(module, imports);
 
   await vm.setInstance(instance);
 
