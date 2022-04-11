@@ -1,4 +1,5 @@
 import { BrowserVm } from "./browserVm";
+import "./style.css";
 
 let browserVm:BrowserVm;
 
