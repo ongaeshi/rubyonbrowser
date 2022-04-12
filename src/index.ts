@@ -36,6 +36,8 @@ const main = async () => {
   document.getElementById("clear").onclick = selectAllScripts;
   document.getElementById("files").onclick = listFiles;
 
+  codeEditor.focus();
+
   runRubyScriptsInHtml();
 };
 
