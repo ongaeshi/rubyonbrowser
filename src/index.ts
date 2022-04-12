@@ -8,12 +8,19 @@ import "./style.css";
 let browserVm:BrowserVm;
 
 let outputBuffer:string[] = [];
+
 const codeEditor = CodeMirror.fromTextArea(document.getElementById("input") as HTMLTextAreaElement, {
   theme: 'monokai', // TODO: See other themes
   mode: "text/x-ruby",
   // matchBrackets: true, // TODO: Support TypeScript
   indentUnit: 2
 });
+codeEditor.setOption("extraKeys", {
+  "Ctrl-Enter": function(cm) {
+    runRubyScriptsInHtml()
+  }
+});
+
 const outputTextArea:HTMLTextAreaElement = <HTMLTextAreaElement>document.getElementById("output");
 
 const printToOutput = function (line: string):void {
@@ -25,19 +32,12 @@ const main = async () => {
   browserVm = new BrowserVm()
   await browserVm.createVm(printToOutput)
 
-  document.getElementById("input").onkeydown = checkRunWithKeyboard;
   document.getElementById("run").onclick = runRubyScriptsInHtml;
   document.getElementById("clear").onclick = selectAllScripts;
   document.getElementById("files").onclick = listFiles;
 
   runRubyScriptsInHtml();
 };
-
-const checkRunWithKeyboard = function(event: KeyboardEvent) {
-  if (event.ctrlKey && event.key == "Enter") {
-    runRubyScriptsInHtml();
-  } 
-}
 
 export const runRubyScriptsInHtml = function () {
   outputBuffer = [];
