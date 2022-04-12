@@ -57,7 +57,7 @@ export const runRubyScriptsInHtml = function () {
 
 export const selectAllScripts = function () {
   codeEditor.focus();
-  // inputTextArea.select(); // TODO: select all
+  codeEditor.execCommand("selectAll");
 };
 
 const listFiles = function () {
