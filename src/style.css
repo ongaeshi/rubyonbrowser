@@ -1,4 +1,12 @@
+nav {
+    outline: solid 1px #a2a5a8;
+}
+
 .rob-navbar {
-    background-color: #9a7fda !important;
-    color: #fff !important;
+    background-color: #f8f9fa !important;
+    color: #25292e !important;
+}
+
+.navbar-brand {
+    font-size: 1.1rem;
 }
