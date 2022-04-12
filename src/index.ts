@@ -1,4 +1,8 @@
 import { BrowserVm } from "./browserVm";
+import CodeMirror from "codemirror";
+import "codemirror/mode/ruby/ruby";
+import "codemirror/lib/codemirror.css";
+import "codemirror/theme/monokai.css";
 import "./style.css";
 
 let browserVm:BrowserVm;
@@ -13,6 +17,13 @@ const printToOutput = function (line: string):void {
 }
 
 const main = async () => {
+  CodeMirror.fromTextArea(document.getElementById("input") as HTMLTextAreaElement, {
+    theme: 'monokai',
+    mode: "text/x-ruby",
+    // matchBrackets: true, // TODO: Support TypeScript
+    indentUnit: 2
+  });
+
   browserVm = new BrowserVm()
   await browserVm.createVm(printToOutput)
 
