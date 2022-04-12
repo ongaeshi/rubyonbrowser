@@ -8,7 +8,12 @@ import "./style.css";
 let browserVm:BrowserVm;
 
 let outputBuffer:string[] = [];
-const inputTextArea:HTMLTextAreaElement = <HTMLTextAreaElement>document.getElementById("input");
+const codeEditor = CodeMirror.fromTextArea(document.getElementById("input") as HTMLTextAreaElement, {
+  theme: 'monokai', // TODO: See other themes
+  mode: "text/x-ruby",
+  // matchBrackets: true, // TODO: Support TypeScript
+  indentUnit: 2
+});
 const outputTextArea:HTMLTextAreaElement = <HTMLTextAreaElement>document.getElementById("output");
 
 const printToOutput = function (line: string):void {
@@ -17,13 +22,6 @@ const printToOutput = function (line: string):void {
 }
 
 const main = async () => {
-  CodeMirror.fromTextArea(document.getElementById("input") as HTMLTextAreaElement, {
-    theme: 'monokai',
-    mode: "text/x-ruby",
-    // matchBrackets: true, // TODO: Support TypeScript
-    indentUnit: 2
-  });
-
   browserVm = new BrowserVm()
   await browserVm.createVm(printToOutput)
 
@@ -45,7 +43,7 @@ export const runRubyScriptsInHtml = function () {
   outputBuffer = [];
 
   try {
-    const result = browserVm.vm.eval(inputTextArea.value);
+    const result = browserVm.vm.eval(codeEditor.getValue());
   
     if (outputBuffer.length == 0) {
       outputTextArea.value = result.toString()
@@ -58,8 +56,8 @@ export const runRubyScriptsInHtml = function () {
 };
 
 export const selectAllScripts = function () {
-  inputTextArea.focus();
-  inputTextArea.select();
+  codeEditor.focus();
+  // inputTextArea.select(); // TODO: select all
 };
 
 const listFiles = function () {
