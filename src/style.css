@@ -10,3 +10,13 @@ nav {
 .navbar-brand {
     font-size: 1.1rem;
 }
+
+.CodeMirror {
+    border: 1px solid #eee;
+}
+
+@media (min-width: 992px) {
+.CodeMirror {
+    height: 640px;
+    }          
+}
