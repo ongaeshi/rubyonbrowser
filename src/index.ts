@@ -2,7 +2,7 @@ import { BrowserVm } from "./browserVm";
 import CodeMirror from "codemirror";
 import "codemirror/mode/ruby/ruby";
 import "codemirror/lib/codemirror.css";
-import "codemirror/theme/monokai.css";
+import "codemirror/theme/rubyblue.css";
 import "./style.css";
 
 let browserVm:BrowserVm;
@@ -10,7 +10,7 @@ let browserVm:BrowserVm;
 let outputBuffer:string[] = [];
 
 const codeEditor = CodeMirror.fromTextArea(document.getElementById("input") as HTMLTextAreaElement, {
-  theme: 'monokai', // TODO: See other themes
+  theme: 'rubyblue',
   mode: "text/x-ruby",
   // matchBrackets: true, // TODO: Support TypeScript
   indentUnit: 2
