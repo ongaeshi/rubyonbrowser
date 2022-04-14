@@ -10,3 +10,20 @@ nav {
 .navbar-brand {
     font-size: 1.1rem;
 }
+
+.CodeMirror {
+    border: 1px solid #eee;
+    height: 240px;
+}
+
+@media (min-width: 768px) { /* Medium(md) */
+    .CodeMirror {
+        height: 320px;
+    }          
+}
+
+@media (min-width: 992px) { /* Large(lg) */
+    .CodeMirror {
+        height: 640px;
+    }          
+}
