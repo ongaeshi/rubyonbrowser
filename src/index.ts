@@ -3,18 +3,25 @@ import CodeMirror from "codemirror";
 import "codemirror/mode/ruby/ruby";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/rubyblue.css";
+import "codemirror/addon/edit/matchbrackets";
+import "codemirror/addon/edit/closebrackets";
 import "./style.css";
 
 let browserVm:BrowserVm;
 
 let outputBuffer:string[] = [];
 
-const codeEditor = CodeMirror.fromTextArea(document.getElementById("input") as HTMLTextAreaElement, {
-  theme: 'rubyblue',
-  mode: "text/x-ruby",
-  // matchBrackets: true, // TODO: Support TypeScript
-  indentUnit: 2
-});
+const codeEditor = CodeMirror.fromTextArea(
+  document.getElementById("input") as HTMLTextAreaElement,
+  {
+    theme: 'rubyblue',
+    mode: "text/x-ruby",
+    indentUnit: 2,
+    matchBrackets: true,
+    autoCloseBrackets: true
+  }
+);
+
 codeEditor.setOption("extraKeys", {
   "Ctrl-Enter": function(cm) {
     runRubyScriptsInHtml()
