@@ -4,6 +4,7 @@ import "codemirror/mode/ruby/ruby";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/rubyblue.css";
 import "codemirror/addon/edit/matchbrackets";
+import "codemirror/addon/edit/closebrackets";
 import "./style.css";
 
 let browserVm:BrowserVm;
@@ -15,8 +16,9 @@ const codeEditor = CodeMirror.fromTextArea(
   {
     theme: 'rubyblue',
     mode: "text/x-ruby",
+    indentUnit: 2,
     matchBrackets: true,
-    indentUnit: 2
+    autoCloseBrackets: true
   }
 );
 
