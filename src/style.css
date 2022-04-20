@@ -25,6 +25,6 @@ nav {
 
 @media (min-width: 992px) { /* Large(lg) */
     .CodeMirror {
-        height: 640px;
+        height: 580px;
     }          
 }
