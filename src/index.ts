@@ -60,13 +60,18 @@ export const runRubyScriptsInHtml = function () {
   outputBuffer = [];
 
   try {
-    console.log(LZString.compressToEncodedURIComponent(codeEditor.getValue()))
-  
     const result = browserVm.vm.eval(codeEditor.getValue());
 
     if (outputBuffer.length == 0) {
       outputTextArea.value = result.toString()
     }  
+
+    // Rewrite URL If eval successed
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    urlParams.set("q", LZString.compressToEncodedURIComponent(codeEditor.getValue()))
+    history.replaceState('', '', "?" + urlParams.toString());
+
   } catch (error) {
     outputTextArea.value = error;
   }
