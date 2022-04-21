@@ -41,7 +41,11 @@ const main = async () => {
   const urlParams = new URLSearchParams(queryString);
   const code = urlParams.get('q')
   if (code !== null) {
-    codeEditor.setValue(LZString.decompressFromEncodedURIComponent(code))
+    if (code === "") {
+      codeEditor.setValue("")
+    } else {
+      codeEditor.setValue(LZString.decompressFromEncodedURIComponent(code))
+    }
   }
 
   browserVm = new BrowserVm()
