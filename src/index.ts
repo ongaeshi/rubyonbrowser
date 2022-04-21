@@ -6,6 +6,7 @@ import "codemirror/theme/rubyblue.css";
 import "codemirror/addon/edit/matchbrackets";
 import "codemirror/addon/edit/closebrackets";
 import "./style.css";
+import LZString from "lz-string"
 
 let browserVm:BrowserVm;
 
@@ -36,6 +37,17 @@ const printToOutput = function (line: string):void {
 }
 
 const main = async () => {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const code = urlParams.get('q')
+  if (code !== null) {
+    if (code === "") {
+      codeEditor.setValue("")
+    } else {
+      codeEditor.setValue(LZString.decompressFromEncodedURIComponent(code))
+    }
+  }
+
   browserVm = new BrowserVm()
   await browserVm.createVm(printToOutput)
 
@@ -53,10 +65,17 @@ export const runRubyScriptsInHtml = function () {
 
   try {
     const result = browserVm.vm.eval(codeEditor.getValue());
-  
+
     if (outputBuffer.length == 0) {
       outputTextArea.value = result.toString()
     }  
+
+    // Rewrite URL If eval successed
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    urlParams.set("q", LZString.compressToEncodedURIComponent(codeEditor.getValue()))
+    history.replaceState('', '', "?" + urlParams.toString());
+
   } catch (error) {
     outputTextArea.value = error;
   }
