@@ -64,18 +64,18 @@ export const runRubyScriptsInHtml = function () {
   outputBuffer = [];
 
   try {
-    const result = browserVm.vm.eval(codeEditor.getValue());
-
-    if (outputBuffer.length == 0) {
-      outputTextArea.value = result.toString()
-    }  
-
-    // Rewrite URL If eval successed
+    // Rewrite URL
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     urlParams.set("q", LZString.compressToEncodedURIComponent(codeEditor.getValue()))
     history.replaceState('', '', "?" + urlParams.toString());
 
+    // Run eval
+    const result = browserVm.vm.eval(codeEditor.getValue());
+
+    if (outputBuffer.length == 0) {
+      outputTextArea.value = result.toString()
+    }
   } catch (error) {
     outputTextArea.value = error;
   }
