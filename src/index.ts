@@ -6,6 +6,7 @@ import "codemirror/theme/rubyblue.css";
 import "codemirror/addon/edit/matchbrackets";
 import "codemirror/addon/edit/closebrackets";
 import "./style.css";
+import LZString from "lz-string"
 
 let browserVm:BrowserVm;
 
@@ -52,8 +53,14 @@ export const runRubyScriptsInHtml = function () {
   outputBuffer = [];
 
   try {
-    const result = browserVm.vm.eval(codeEditor.getValue());
+    // lz-string test
+    let s = LZString.compressToEncodedURIComponent(codeEditor.getValue())
+    console.log(s)
+    let code = LZString.decompressFromEncodedURIComponent(s)
+    console.log(code)
   
+    const result = browserVm.vm.eval(codeEditor.getValue());
+
     if (outputBuffer.length == 0) {
       outputTextArea.value = result.toString()
     }  
