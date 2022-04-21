@@ -25,6 +25,12 @@ nav {
 
 @media (min-width: 992px) { /* Large(lg) */
     .CodeMirror {
-        height: 580px;
+        height: 540px;
+    }          
+}
+
+@media (min-width: 1200px) { /* Extra Large(xl) */
+    .CodeMirror {
+        height: 800px;
     }          
 }
