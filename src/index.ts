@@ -37,6 +37,13 @@ const printToOutput = function (line: string):void {
 }
 
 const main = async () => {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const code = urlParams.get('q')
+  if (code !== null) {
+    codeEditor.setValue(LZString.decompressFromEncodedURIComponent(code))
+  }
+
   browserVm = new BrowserVm()
   await browserVm.createVm(printToOutput)
 
@@ -53,11 +60,7 @@ export const runRubyScriptsInHtml = function () {
   outputBuffer = [];
 
   try {
-    // lz-string test
-    let s = LZString.compressToEncodedURIComponent(codeEditor.getValue())
-    console.log(s)
-    let code = LZString.decompressFromEncodedURIComponent(s)
-    console.log(code)
+    console.log(LZString.compressToEncodedURIComponent(codeEditor.getValue()))
   
     const result = browserVm.vm.eval(codeEditor.getValue());
 
