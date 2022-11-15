@@ -73,6 +73,9 @@ export const runRubyScriptsInHtml = function () {
     urlParams.set("q", LZString.compressToEncodedURIComponent(codeEditor.getValue()))
     history.replaceState('', '', "?" + urlParams.toString());
 
+    // Clear framebuffer
+    frameBuffer.set(new Uint8Array(100*100));
+
     // Run eval
     const src = `
     require "js"
@@ -89,7 +92,9 @@ export const runRubyScriptsInHtml = function () {
 
     const canvasdiv = document.getElementById("canvasdiv");
 
-    if (outputBuffer.length == 0) {
+    const isPixelWritten = frameBuffer.findIndex((e) => e !== 0) != -1
+
+    if (isPixelWritten) {
       canvasdiv.style.display = "block";
       writeToCanvas();
     } else {
