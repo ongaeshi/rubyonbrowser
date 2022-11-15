@@ -12,6 +12,8 @@ let browserVm:BrowserVm;
 
 let outputBuffer:string[] = [];
 
+var frameBuffer:Uint32Array = new Uint32Array(100*100);
+
 const codeEditor = CodeMirror.fromTextArea(
   document.getElementById("input") as HTMLTextAreaElement,
   {
@@ -70,8 +72,19 @@ export const runRubyScriptsInHtml = function () {
     urlParams.set("q", LZString.compressToEncodedURIComponent(codeEditor.getValue()))
     history.replaceState('', '', "?" + urlParams.toString());
 
+    frameBuffer[0] = 0xff0000ff;
+    frameBuffer[1] = 0x00ff00ff;
+    frameBuffer[2] = 0x0000ffff;
+    frameBuffer[3] = 0x000000a0;
     // Run eval
-    const result = browserVm.vm.eval(codeEditor.getValue());
+    const src = `
+    require "js"
+
+    def set_pixel(x, y, color)
+      JS::eval("frameBuffer[#{y} * 100 + #{x}] = #{color}")
+    end
+    `
+    const result = browserVm.vm.eval(src + "\n" + codeEditor.getValue());
 
     if (outputBuffer.length == 0) {
       outputTextArea.value = result.toString()
@@ -146,10 +159,11 @@ function writeToCanvas() {
   const context = canvas.getContext("2d");
   const imgData = context.createImageData(100, 100);
   for (let i = 0; i < 100 * 100; i++) {
-    imgData.data[i * 4] = Math.random() * 255;
-    imgData.data[i * 4 + 1] = Math.random() * 255;
-    imgData.data[i * 4 + 2] = Math.random() * 255;
-    imgData.data[i * 4 + 3] = 255;
+    const c:number = frameBuffer[i];
+    imgData.data[i * 4] = (c >> 24) & 0xff;
+    imgData.data[i * 4 + 1] = (c >> 16) & 0xff;
+    imgData.data[i * 4 + 2] = (c >> 8) & 0xff;
+    imgData.data[i * 4 + 3] = c & 0xff;
   }
   const data = scaleImageData(imgData, 3, context);
   context.putImageData(data, 0, 0);
