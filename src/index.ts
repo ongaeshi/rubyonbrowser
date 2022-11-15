@@ -12,7 +12,8 @@ let browserVm:BrowserVm;
 
 let outputBuffer:string[] = [];
 
-var frameBuffer:Uint32Array = new Uint32Array(100*100);
+(window as any).frameBuffer = new Uint32Array(100*100);
+let frameBuffer:Uint32Array = (window as any).frameBuffer;
 
 const codeEditor = CodeMirror.fromTextArea(
   document.getElementById("input") as HTMLTextAreaElement,
@@ -72,10 +73,6 @@ export const runRubyScriptsInHtml = function () {
     urlParams.set("q", LZString.compressToEncodedURIComponent(codeEditor.getValue()))
     history.replaceState('', '', "?" + urlParams.toString());
 
-    frameBuffer[0] = 0xff0000ff;
-    frameBuffer[1] = 0x00ff00ff;
-    frameBuffer[2] = 0x0000ffff;
-    frameBuffer[3] = 0x000000a0;
     // Run eval
     const src = `
     require "js"
