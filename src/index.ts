@@ -76,6 +76,16 @@ export const runRubyScriptsInHtml = function () {
     if (outputBuffer.length == 0) {
       outputTextArea.value = result.toString()
     }
+
+    const canvasdiv = document.getElementById("canvasdiv");
+
+    if (outputBuffer.length == 0) {
+      canvasdiv.style.display = "block";
+      writeToCanvas();
+    } else {
+      canvasdiv.style.display = "none";
+    }
+
   } catch (error) {
     outputTextArea.value = error;
   }
@@ -108,5 +118,41 @@ filetree(File.expand_path(Dir.pwd))
 
   files.value = browserVm.vm.eval(script).toString()
 };
+
+
+// quick and dirty image data scaling
+// see: https://stackoverflow.com/questions/3448347/how-to-scale-an-imagedata-in-html-canvas
+const scaleImageData = (imageData: any, scale: any, ctx: any) => {
+  const scaled = ctx.createImageData(imageData.width * scale, imageData.height * scale);
+  const subLine = ctx.createImageData(scale, 1).data;
+  for (let row = 0; row < imageData.height; row++) {
+      for (let col = 0; col < imageData.width; col++) {
+          const sourcePixel = imageData.data.subarray((row * imageData.width + col) * 4, (row * imageData.width + col) * 4 + 4);
+          for (let x = 0; x < scale; x++)
+              subLine.set(sourcePixel, x * 4);
+          for (let y = 0; y < scale; y++) {
+              const destRow = row * scale + y;
+              const destCol = col * scale;
+              scaled.data.set(subLine, (destRow * scaled.width + destCol) * 4);
+          }
+      }
+  }
+  return scaled;
+};
+
+function writeToCanvas() {
+  const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+
+  const context = canvas.getContext("2d");
+  const imgData = context.createImageData(100, 100);
+  for (let i = 0; i < 100 * 100; i++) {
+    imgData.data[i * 4] = Math.random() * 255;
+    imgData.data[i * 4 + 1] = Math.random() * 255;
+    imgData.data[i * 4 + 2] = Math.random() * 255;
+    imgData.data[i * 4 + 3] = 255;
+  }
+  const data = scaleImageData(imgData, 3, context);
+  context.putImageData(data, 0, 0);
+}
 
 main();
