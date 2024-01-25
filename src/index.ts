@@ -50,6 +50,12 @@ const main = async () => {
       codeEditor.setValue(LZString.decompressFromEncodedURIComponent(code))
     }
   }
+  const q2 = urlParams.get('q2')
+  if (q2 !== null) {
+    if (q2 !== "") {
+      codeEditor.setValue(decodeURIComponent(q2))
+    }
+  }
 
   browserVm = new BrowserVm()
   await browserVm.createVm(printToOutput)
@@ -70,7 +76,8 @@ export const runRubyScriptsInHtml = function () {
     // Rewrite URL
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    urlParams.set("q", LZString.compressToEncodedURIComponent(codeEditor.getValue()))
+    urlParams.set("q", LZString.compressToEncodedURIComponent(codeEditor.getValue()));
+    urlParams.delete("q2");
     history.replaceState('', '', "?" + urlParams.toString());
 
     // Clear framebuffer
